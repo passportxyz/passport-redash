@@ -59,9 +59,9 @@ setup_compose() {
 
     sed -ri "s/image: redash\/redash:([A-Za-z0-9.-]*)/image: redash\/redash:$LATEST_VERSION/" /home/ubuntu/passport-redash/data/docker-compose.yml
     echo "export COMPOSE_PROJECT_NAME=redash" >> ~/.profile
-    echo "export COMPOSE_FILE=/home/ubuntu/passport-redash/data" >> ~/.profile
+    echo "export COMPOSE_FILE=/home/ubuntu/passport-redash/data/docker-compose.yml" >> ~/.profile
     export COMPOSE_PROJECT_NAME=redash
-    export COMPOSE_FILE=/home/ubuntu/passport-redash/data
+    export COMPOSE_FILE=/home/ubuntu/passport-redash/data/docker-compose.yml
     sudo docker-compose run --rm server create_db
     sudo docker-compose up -d
 }
