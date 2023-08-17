@@ -29,7 +29,7 @@ create_directories() {
     fi
 
     if [[ ! -e $REDASH_BASE_PATH/postgres-data ]]; then
-        mkdir $REDASH_BASE_PATH/postgres-data
+        sudo mkdir $REDASH_BASE_PATH/postgres-data
     fi
 }
 
@@ -42,31 +42,31 @@ create_config() {
     COOKIE_SECRET=$(pwgen -1s 32)
     SECRET_KEY=$(pwgen -1s 32)
 
-    echo "PYTHONUNBUFFERED=0" >> $REDASH_BASE_PATH/env
-    echo "REDASH_LOG_LEVEL=INFO" >> $REDASH_BASE_PATH/env
-    echo "REDASH_REDIS_URL=redis://redis:6379/0" >> $REDASH_BASE_PATH/env
-    echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> $REDASH_BASE_PATH/env
-    echo "REDASH_COOKIE_SECRET=$COOKIE_SECRET" >> $REDASH_BASE_PATH/env
-    echo "REDASH_SECRET_KEY=$SECRET_KEY" >> $REDASH_BASE_PATH/env
-    echo "REDASH_DATABASE_URL=$REDASH_DATABASE_URL" >> $REDASH_BASE_PATH/env
+    sudo echo "PYTHONUNBUFFERED=0" >> $REDASH_BASE_PATH/env
+    sudo echo "REDASH_LOG_LEVEL=INFO" >> $REDASH_BASE_PATH/env
+    sudo echo "REDASH_REDIS_URL=redis://redis:6379/0" >> $REDASH_BASE_PATH/env
+    sudo echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> $REDASH_BASE_PATH/env
+    sudo echo "REDASH_COOKIE_SECRET=$COOKIE_SECRET" >> $REDASH_BASE_PATH/env
+    sudo echo "REDASH_SECRET_KEY=$SECRET_KEY" >> $REDASH_BASE_PATH/env
+    sudo echo "REDASH_DATABASE_URL=$REDASH_DATABASE_URL" >> $REDASH_BASE_PATH/env
 }
 
-setup_compose() {
-    REQUESTED_CHANNEL=stable
-    LATEST_VERSION=`curl -s "https://version.redash.io/api/releases?channel=$REQUESTED_CHANNEL"  | json_pp  | grep "docker_image" | head -n 1 | awk 'BEGIN{FS=":"}{print $3}' | awk 'BEGIN{FS="\""}{print $1}'`
+# setup_compose() {
+#     REQUESTED_CHANNEL=stable
+#     LATEST_VERSION=`curl -s "https://version.redash.io/api/releases?channel=$REQUESTED_CHANNEL"  | json_pp  | grep "docker_image" | head -n 1 | awk 'BEGIN{FS=":"}{print $3}' | awk 'BEGIN{FS="\""}{print $1}'`
 
-    cd $REDASH_BASE_PATH
+#     cd $REDASH_BASE_PATH
 
-    sed -ri "s/image: redash\/redash:([A-Za-z0-9.-]*)/image: redash\/redash:$LATEST_VERSION/" /home/ubuntu/passport-redash/data/docker-compose.yml
-    echo "export COMPOSE_PROJECT_NAME=redash" >> ~/.profile
-    echo "export COMPOSE_FILE=/home/ubuntu/passport-redash/data/docker-compose.yml" >> ~/.profile
-    export COMPOSE_PROJECT_NAME=redash
-    export COMPOSE_FILE=/home/ubuntu/passport-redash/data/docker-compose.yml
-    sudo docker-compose run --rm server create_db
-    sudo docker-compose up -d
-}
+#     sed -ri "s/image: redash\/redash:([A-Za-z0-9.-]*)/image: redash\/redash:$LATEST_VERSION/" /home/ubuntu/passport-redash/data/docker-compose.yml
+#     echo "export COMPOSE_PROJECT_NAME=redash" >> ~/.profile
+#     echo "export COMPOSE_FILE=/home/ubuntu/passport-redash/data/docker-compose.yml" >> ~/.profile
+#     export COMPOSE_PROJECT_NAME=redash
+#     export COMPOSE_FILE=/home/ubuntu/passport-redash/data/docker-compose.yml
+#     sudo docker-compose run --rm server create_db
+#     sudo docker-compose up -d
+# }
 
 install_docker
 create_directories
 create_config
-setup_compose
+# setup_compose
