@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # This script setups dockerized Redash on Ubuntu 18.04.
+USER=ubuntu
 set -eu
 
 REDASH_BASE_PATH=/opt/redash
@@ -19,7 +20,7 @@ install_docker(){
     sudo chmod +x /usr/local/bin/docker-compose
 
     # Allow current user to run Docker commands
-    # sudo usermod -aG docker $USER
+    sudo usermod -aG docker $USER
 }
 
 create_directories() {
