@@ -1,4 +1,4 @@
-version: "2"
+version: "3.9"
 x-redash-service: &redash-service
   image: redash/redash:8.0.0.b32245
   depends_on:
@@ -6,7 +6,7 @@ x-redash-service: &redash-service
   env_file: /opt/redash/env
   restart: always
 services:
-  server:
+  redash:
     <<: *redash-service
     command: server
     ports:
@@ -39,7 +39,7 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - server
+      - redash
     links:
-      - server:redash
+      - redash:redash
     restart: always
